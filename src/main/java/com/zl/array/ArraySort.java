@@ -96,7 +96,7 @@ public class ArraySort {
         if (l >= r) {
             return;
         }
-        int mid = l + ((r - l) >> 2);
+        int mid = l + ((r - l) >> 1);
         sortArray(arr, l, mid);
         sortArray(arr, mid + 1, r);
         merge(arr, l, mid, r);
@@ -116,9 +116,7 @@ public class ArraySort {
         while(p2 <= r) {
             help[i++] = arr[p2++];
         }
-        for (i = 0; i < help.length; i++) {
-            arr[l + i] = help[i];
-        }
+        System.arraycopy(help, 0, arr, l, help.length);
     }
     //    private static void swap(int[] arr, int i, int j) {
 //        arr[i] = arr[i] + arr[j];
