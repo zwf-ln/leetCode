@@ -8,7 +8,7 @@ public class ArraySort {
         int[] arr = {3, 5, 1, 3, 6, 7};
 //        bubbleSort(arr);
 
-        System.out.println(Arrays.toString(insertSort(arr)));
+        System.out.println(Arrays.toString(mergeSort(arr)));
         // swap(arr, 0, 0);
         //System.out.println(Arrays.toString(arr));
     }
@@ -61,6 +61,11 @@ public class ArraySort {
         return arr;
     }
 
+    /**
+     * 插入排序
+     * @param arr
+     * @return
+     */
     public static int[] insertSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return arr;
@@ -75,6 +80,46 @@ public class ArraySort {
         return arr;
     }
 
+    /**
+     * 归并排序, 排得过程中插入到新数组;
+     * @param arr
+     * @return
+     */
+    public static int[] mergeSort(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return arr;
+        }
+        sortArray(arr, 0, arr.length - 1);
+        return arr;
+    }
+    private static void sortArray(int[] arr, int l, int r) {
+        if (l >= r) {
+            return;
+        }
+        int mid = l + ((r - l) >> 2);
+        sortArray(arr, l, mid);
+        sortArray(arr, mid + 1, r);
+        merge(arr, l, mid, r);
+    }
+    private static void merge(int[] arr, int l, int mid, int r) {
+        int[] help = new int[r - l + 1];
+        int i = 0;
+        int p1 = l;
+        int p2 = mid + 1;
+        //mid 以及 r都是闭合点,因此要 <=
+        while (p1 <= mid && p2 <= r) {
+            help[i++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
+        }
+        while (p1 <= mid) {
+            help[i++] = arr[p1++];
+        }
+        while(p2 <= r) {
+            help[i++] = arr[p2++];
+        }
+        for (i = 0; i < help.length; i++) {
+            arr[l + i] = help[i];
+        }
+    }
     //    private static void swap(int[] arr, int i, int j) {
 //        arr[i] = arr[i] + arr[j];
 //        arr[j] = arr[i] - arr[j];
