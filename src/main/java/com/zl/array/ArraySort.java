@@ -1,4 +1,4 @@
-package com.zl.arraySort;
+package com.zl.array;
 
 import java.util.Arrays;
 
