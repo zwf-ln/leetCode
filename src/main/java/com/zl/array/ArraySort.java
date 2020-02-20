@@ -8,7 +8,7 @@ public class ArraySort {
         int[] arr = {3, 5, 1, 3, 6, 7};
 //        bubbleSort(arr);
 
-        System.out.println(Arrays.toString(mergeSort(arr)));
+        System.out.println(Arrays.toString(quickSort(arr)));
         // swap(arr, 0, 0);
         //System.out.println(Arrays.toString(arr));
     }
@@ -63,6 +63,7 @@ public class ArraySort {
 
     /**
      * 插入排序
+     *
      * @param arr
      * @return
      */
@@ -74,7 +75,7 @@ public class ArraySort {
 
             //默认当前位置是有序的,插入一个值,把插入的值放到合适的位置
             for (int j = i - 1; j >= 0 && arr[j] > arr[j + 1]; j--) {
-                swap(arr, j, j +1);
+                swap(arr, j, j + 1);
             }
         }
         return arr;
@@ -82,6 +83,7 @@ public class ArraySort {
 
     /**
      * 归并排序, 排得过程中插入到新数组;
+     *
      * @param arr
      * @return
      */
@@ -92,6 +94,7 @@ public class ArraySort {
         sortArray(arr, 0, arr.length - 1);
         return arr;
     }
+
     private static void sortArray(int[] arr, int l, int r) {
         if (l >= r) {
             return;
@@ -101,6 +104,7 @@ public class ArraySort {
         sortArray(arr, mid + 1, r);
         merge(arr, l, mid, r);
     }
+
     private static void merge(int[] arr, int l, int mid, int r) {
         int[] help = new int[r - l + 1];
         int i = 0;
@@ -113,11 +117,47 @@ public class ArraySort {
         while (p1 <= mid) {
             help[i++] = arr[p1++];
         }
-        while(p2 <= r) {
+        while (p2 <= r) {
             help[i++] = arr[p2++];
         }
         System.arraycopy(help, 0, arr, l, help.length);
     }
+
+    public static int[] quickSort(int[] arr) {
+
+        if (arr == null || arr.length < 2) {
+            return arr;
+        }
+        return quickSort(arr, 0, arr.length - 1);
+    }
+
+    private static int[] quickSort(int[] arr, int l, int r) {
+        if (l < r) {
+            int[] partition = getPartition(arr, l, r);
+            quickSort(arr, l, partition[0] - 1);
+            quickSort(arr, partition[1] + 1, r);
+        }
+        return arr;
+    }
+
+    private static int[] getPartition(int[] arr, int l, int r) {
+        int less = l - 1;
+        int more = r;
+        while (l < more) {
+            if (arr[l] < arr[r]) {
+                swap(arr, ++less, l++);
+            } else if (arr[l] > arr[r]) {
+                swap(arr, --more, l);
+            } else {
+                l++;
+            }
+        }
+        //交换more位置和最后一个值
+        swap(arr, more, r);
+        //注意: less位置的数是小于arr[r]的, more位置的数由于和arr[r]做了交换, 等于arr[r]
+        return new int[]{less + 1, more};
+    }
+
     //    private static void swap(int[] arr, int i, int j) {
 //        arr[i] = arr[i] + arr[j];
 //        arr[j] = arr[i] - arr[j];
