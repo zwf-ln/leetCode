@@ -8,7 +8,7 @@ public class ArraySort {
         int[] arr = {3, 5, 1, 3, 6, 7};
 //        bubbleSort(arr);
 
-        System.out.println(Arrays.toString(quickSort(arr)));
+        System.out.println(Arrays.toString(heapSort(arr)));
         // swap(arr, 0, 0);
         //System.out.println(Arrays.toString(arr));
     }
@@ -158,6 +158,66 @@ public class ArraySort {
         return new int[]{less + 1, more};
     }
 
+    /**
+     * 堆排序
+     * @return
+     */
+    public static int[] heapSort(int[] arr) {
+        /**
+         * 1. 先构建大根堆,
+         * 2. 此时跟上的元素是最大值, 去掉根, 重新组建大根堆
+         */
+        if (checkArr(arr)) {
+            return arr;
+        }
+        //创建大根堆, 此时堆顶元素即为最大值
+        for (int i = 0; i < arr.length; i++) {
+            heapInsert(arr, i);
+        }
+        //对数组进行排序
+        int length = arr.length - 1;
+        swap(arr, 0, length);
+        while (length > 1) {
+            heapify(arr, length--);
+            swap(arr, 0 , length);
+        }
+        return arr;
+    }
+
+    private static void heapify(int[] arr, int length) {
+        int i = 0;
+        int l = 2 * i + 1;
+        while (l < length) {
+            //判断出左右孩子中值最大的索引
+            int largeIndex = l + 1 > length - 1 ? l : (arr[l] > arr[l + 1] ? l : l + 1);
+            //判断是否比当前值要大
+            largeIndex = arr[largeIndex] > arr[i] ? largeIndex : i;
+            //如果堆顶元素仍然是最大的, 则结束循环
+            if (largeIndex == i) {
+                break;
+            }
+            //堆顶元素小于左右节点的值, 交换, 然后把交换后的值,继续循环和子节点比较,直到完成堆化
+            swap(arr, largeIndex, i);
+            i = largeIndex;
+            l = 2 * i + 1;
+        }
+    }
+
+    private static void heapInsert(int[] arr, int i) {
+        //如果当前值比根节点要大, 替换掉根节点,
+        //并把当前索引置换到根节点,继续向上比较
+        for (int head = (i - 1) / 2; arr[i] > arr[head];) {
+            swap(arr, i, head);
+            i = head;
+            head = (i - 1) / 2;
+        }
+    }
+
+    private static boolean checkArr(int[] arr) {
+        if (arr == null || arr.length < 2)
+            return true;
+        return false;
+    }
     //    private static void swap(int[] arr, int i, int j) {
 //        arr[i] = arr[i] + arr[j];
 //        arr[j] = arr[i] - arr[j];

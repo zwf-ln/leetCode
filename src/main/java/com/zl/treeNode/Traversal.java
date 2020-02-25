@@ -1,6 +1,8 @@
 package com.zl.treeNode;
 
-import java.util.Stack;
+import com.zl.treeNode.TreeNode;
+
+import java.util.*;
 
 public class Traversal {
     public static void main(String[] args) {
@@ -47,12 +49,62 @@ public class Traversal {
         preTraversal(root.left);
         preTraversal(root.right);
     }
-    static class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        public TreeNode(int val) {
-            this.val = val;
+
+    /**
+     * 判断是否是相同的树,递归解法
+     * @param p
+     * @param q
+     * @return
+     */
+    public static boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) return true;
+        if (p == null || q == null) return false;
+        //如果当前节点的值不相等,直接返回false,
+        // 如果相等,还需要比较左节点和右节点的值
+        if (p.val != q.val) return false;
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+
+    /**
+     * 使用迭代法
+     * @param p
+     * @param q
+     * @return
+     */
+//    public static boolean isSameTree1(TreeNode p, TreeNode q) {
+//
+//    }
+
+    /**
+     * 二叉树的层次遍历
+     * 迭代法
+     */
+    public static List<List<Integer>> hierarchicalTraversal (TreeNode root) {
+        List<List<Integer>> list = new ArrayList<>();
+        if (root == null) return list;
+        //使用辅助队列
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            list.add(0, new ArrayList<>());
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = queue.remove();
+                list.get(0).add(node.val);
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
         }
+        return list;
+    }
+
+    /**
+     * 二叉树的层次遍历
+     * 递归
+     */
+    public static List<List<Integer>> hierarchicalTraversal1 (TreeNode root) {
+        List<List<Integer>> list = new ArrayList<>();
+        if (root == null) return list;
+        return list;
     }
 }
