@@ -5,16 +5,7 @@ import com.zl.treeNode.TreeNode;
 import java.util.*;
 
 public class Traversal {
-    public static void main(String[] args) {
-        TreeNode root = new TreeNode(4);
-        root.left = new TreeNode(3);
-        root.left.left = new TreeNode(2);
-        root.left.right = new TreeNode(1);
-        root.right = new TreeNode(3);
-        root.right.left = new TreeNode(2);
-        root.right.right = new TreeNode(1);
-        midTraversal(root);
-    }
+
 
     /**
      * 二叉树中序遍历 非递归
@@ -101,10 +92,56 @@ public class Traversal {
     /**
      * 二叉树的层次遍历
      * 递归
+     * 每一次遍历一层, 可以定义一个变量,跟踪节点, 每一次深入 +1;
+     *
      */
     public static List<List<Integer>> hierarchicalTraversal1 (TreeNode root) {
         List<List<Integer>> list = new ArrayList<>();
         if (root == null) return list;
+        int index = 0;
+        hierarchicalTraversal1 (root, index, list);
         return list;
+    }
+
+    private static void hierarchicalTraversal1(TreeNode root, int index, List<List<Integer>> list) {
+        if (root == null) {
+            return;
+        }
+        //list.size() == index,说明当前层已创建list
+        if (list.size() <= index) {
+            list.add(new ArrayList<>());
+        }
+        list.get(index).add(root.val);
+        hierarchicalTraversal1(root.left, index + 1, list);
+        hierarchicalTraversal1(root.right, index + 1, list);
+    }
+
+    public static boolean isBalanced(TreeNode root) {
+        if (root == null) return true;
+        int left = treeDepth(root.left, 0);
+        int right = treeDepth(root.right, 0);
+        if (Math.abs(left - right) > 1) return false;
+        return true;
+    }
+    public static int treeDepth(TreeNode root, int index) {
+        if (root == null) return index;
+        index++;
+        int left = treeDepth(root.left, index);
+        int right = treeDepth(root.right, index);
+        return Math.max(left, right);
+    }
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.left.left = new TreeNode(3);
+        root.left.right = new TreeNode(3);
+        root.right = new TreeNode(2);
+        root.left.left.left = new TreeNode(4);
+        root.left.left.right = new TreeNode(4);
+//        midTraversal(root);
+//        List<List<Integer>> lists = hierarchicalTraversal1(root);
+//        System.out.println(lists);
+        Traversal traversal = new Traversal();
+        System.out.println(isBalanced(root));
     }
 }
